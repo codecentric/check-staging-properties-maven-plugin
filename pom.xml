@@ -5,7 +5,7 @@
     <artifactId>check-staging-properties-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <version>1.0.0</version>
-    
+
     <name>check-staging-properties-maven-plugin</name>
     <description>checks stage dependend properties</description>
     <url>https://github.com/codecentric/check-staging-properties-maven-plugin</url>
@@ -28,6 +28,26 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.8</version>
+                <configuration>
+                    <verbose>true</verbose>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>add-apache-headers</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                        <configuration>
+                            <licenseName>apache_v2</licenseName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
