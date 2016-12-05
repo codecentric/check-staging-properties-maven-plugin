@@ -47,7 +47,6 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
             }
             propertyFiles.add(props);
         }
-
         return propertyFiles;
     }
 
@@ -65,20 +64,18 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         ArrayList<Properties> props = this.getProperties();
-        if (props.size() == 0) {
-            return;
-        }
+        if (props.size() > 1) {
+            if (!StagingProperties.sizesEqual(props)) {
+                this.error("Sizes (number of keys) do not equal");
+            }
 
-        if (!StagingProperties.sizesEqual(props)) {
-            this.error("Sizes (number of keys) do not equal");
-        }
+            if (!StagingProperties.keysEqual(props)) {
+                this.error("Keys do not equal");
+            }
 
-        if (!StagingProperties.keysEqual(props)) {
-            this.error("Keys do not equal");
-        }
-
-        if (!StagingProperties.valuesAreEmpty(props)) {
-            this.error("Values are not empty");
+            if (!StagingProperties.valuesAreEmpty(props)) {
+                this.error("Values are not empty");
+            }
         }
     }
 }
