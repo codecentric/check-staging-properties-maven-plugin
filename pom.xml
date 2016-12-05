@@ -3,10 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.codecentric</groupId>
     <artifactId>check-staging-properties-maven-plugin</artifactId>
+    <name>check-staging-properties-maven-plugin</name>
     <packaging>maven-plugin</packaging>
     <version>1.0.0</version>
-
-    <name>check-staging-properties-maven-plugin</name>
     <description>checks stage dependend properties</description>
     <url>https://github.com/codecentric/check-staging-properties-maven-plugin</url>
     <organization>
