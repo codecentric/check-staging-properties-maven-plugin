@@ -5,8 +5,22 @@
     <artifactId>check-staging-properties-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <version>1.0.0</version>
+    
     <name>check-staging-properties-maven-plugin</name>
-    <url>http://maven.apache.org</url>
+    <description>checks stage dependend properties</description>
+    <url>https://github.com/codecentric/check-staging-properties-maven-plugin</url>
+    <organization>
+        <name>codecentric AG</name>
+        <url>https://www.codecentric.de/</url>
+    </organization>
+    <inceptionYear>2016</inceptionYear>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
