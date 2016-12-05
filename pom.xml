@@ -11,7 +11,7 @@
     <url>https://github.com/codecentric/check-staging-properties-maven-plugin</url>
     <organization>
         <name>codecentric AG</name>
-        <url>https://www.codecentric.de/</url>
+        <url>https://www.codecentric.de</url>
     </organization>
     <inceptionYear>2016</inceptionYear>
     <licenses>
@@ -21,6 +21,23 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+    <developers>
+        <developer>
+            <name>Bennet Schulz</name>
+            <organization>codecentric AG</organization>
+            <organizationUrl>https://www.codecentric.de</organizationUrl>
+        </developer>
+        <developer>
+            <name>Christian Langmann</name>
+            <organization>codecentric AG</organization>
+            <organizationUrl>https://www.codecentric.de</organizationUrl>
+        </developer>
+        <developer>
+            <name>Florian Kraus</name>
+            <organization>codecentric AG</organization>
+            <organizationUrl>https://www.codecentric.de</organizationUrl>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
