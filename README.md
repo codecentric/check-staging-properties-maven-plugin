@@ -6,18 +6,6 @@ Maven-plugin for checking the equality of several `.properties`-files for Mule a
 - name of the keys are equal and
 - values are empty.
 
-## Installation
-
-Add the dependency within `dependencies` in your `pom.xml`.
-
-```xml
-<dependency>
-  <groupId>de.codecentric</groupId>
-  <artifactId>check-staging-properties-maven-plugin</artifactId>
-  <version>1.0.0</version>
-</dependency>
-```
-
 ## Usage
 
 Add the following lines within `build > plugins` in your `pom.xml`.
