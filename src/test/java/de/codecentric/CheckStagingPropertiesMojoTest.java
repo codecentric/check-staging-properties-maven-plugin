@@ -10,30 +10,30 @@ import org.junit.rules.TemporaryFolder;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 
 public class CheckStagingPropertiesMojoTest {
+
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
-    private void writePropertiesFile(String filename, String content) throws Exception {
-        File f = new File(folder.getRoot().toString() + "/" + filename);
-        BufferedWriter w = new BufferedWriter(new FileWriter(f));
-        w.write(content);
-        w.close();
-    }
-
     @Test
-    public void testGetProperties() throws Exception {
+    public void shouldContainEmptyList() {
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
         ArrayList<Properties> properties = mojo.getProperties();
         assertEquals(0, properties.size());
+    }
+
+    @Test
+    public void shouldNotUseNonPropertiesFiles() throws IOException {
+        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
 
         folder.newFolder("child");
         folder.newFile("app-DEV.properties");
@@ -41,51 +41,48 @@ public class CheckStagingPropertiesMojoTest {
         folder.newFile(".DS_Store");
         folder.newFolder("test.pdf");
 
-        properties = mojo.getProperties();
-        assertEquals(2, properties.size());
+        assertEquals(2, mojo.getProperties().size());
     }
 
     @Test
-    public void testGetPropertiesRecursive() throws Exception {
+    public void testGetPropertiesRecursively() throws Exception {
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
-        ArrayList<Properties> properties = mojo.getProperties();
-        assertEquals(0, properties.size());
 
         folder.newFile("app-DEV.properties");
         folder.newFile("app-PRD.properties");
         folder.newFolder("child");
         folder.newFile("child/app-STG.properties");
 
-        properties = mojo.getProperties();
-        assertEquals(3, properties.size());
+        assertEquals(3, mojo.getProperties().size());
     }
 
     @Test
-    public void testGetPropertiesDirectoryDoesNotExist() {
+    public void shouldContainEmptyPropertiesListWhenInputFileDoesNotExist() {
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(new File("/does/not/exist"), true);
         assertEquals(0, mojo.getProperties().size());
     }
 
     @Test
-    public void testExecuteEmptyDirectory() throws Exception {
+    public void shouldExecutePluginWhenDirectoryEntryIsNotPreconfigured() throws Exception {
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
         mojo.execute(); // should work
     }
 
     @Test
-    public void testExecuteSizesDoNotEqual() throws Exception {
-        this.writePropertiesFile("app-DEV.properties", "test.one =");
-        this.writePropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
+    public void shouldBreakBuildWhenPropertiesSizesAreNotEqual() throws Exception {
+        createTestPropertiesFile("app-DEV.properties", "test.one =");
+        createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
         exception.expect(MojoExecutionException.class);
+
         mojo.execute();
     }
 
     @Test
-    public void testExecuteSizesDoNotEqualDoNotBreak() throws Exception {
-        this.writePropertiesFile("app-DEV.properties", "test.one =");
-        this.writePropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
+    public void shouldNotBreakBuildWhenPropertiesSizesAreNotEqual() throws Exception {
+        this.createTestPropertiesFile("app-DEV.properties", "test.one =");
+        this.createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
 
         TestCheckStagingPropertiesMojo mojo2 = new TestCheckStagingPropertiesMojo(folder.getRoot(), false);
         exception.expect(MojoFailureException.class);
@@ -93,43 +90,54 @@ public class CheckStagingPropertiesMojoTest {
     }
 
     @Test
-    public void testExecuteKeysDoNotEqual() throws Exception {
-        this.writePropertiesFile("app-DEV.properties", "test.one =\ntest.three =");
-        this.writePropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
+    public void shouldBreakBuildWhenPropertiesKeysAreNotEqual() throws Exception {
+        this.createTestPropertiesFile("app-DEV.properties", "test.one =\ntest.three =");
+        this.createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
         exception.expect(MojoExecutionException.class);
+
         mojo.execute();
     }
 
     @Test
-    public void testExecuteKeysDoNotEqualDoNotBreak() throws Exception {
-        this.writePropertiesFile("app-DEV.properties", "test.one =\ntest.three =");
-        this.writePropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
+    public void shouldNotBreakBuildWhenPropertiesKeysAreNotEqual() throws Exception {
+        this.createTestPropertiesFile("app-DEV.properties", "test.one =\ntest.three =");
+        this.createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
 
         TestCheckStagingPropertiesMojo mojo2 = new TestCheckStagingPropertiesMojo(folder.getRoot(), false);
         exception.expect(MojoFailureException.class);
+
         mojo2.execute();
     }
 
     @Test
-    public void testExecuteValuesAreNotEqual() throws Exception {
-        this.writePropertiesFile("app-DEV.properties", "test.one = one\ntest.two =");
-        this.writePropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
+    public void shouldBreakBuildWhenPropertiesValuesAreNotEqual() throws Exception {
+        this.createTestPropertiesFile("app-DEV.properties", "test.one = one\ntest.two =");
+        this.createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
         exception.expect(MojoExecutionException.class);
+
         mojo.execute();
     }
 
     @Test
-    public void testExecuteValuesAreNotEqualDoNotBreak() throws Exception {
-        this.writePropertiesFile("app-DEV.properties", "test.one = one\ntest.two =");
-        this.writePropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
+    public void shouldNotBreakBuildWhenValuesAreNotEqual() throws Exception {
+        this.createTestPropertiesFile("app-DEV.properties", "test.one = one\ntest.two =");
+        this.createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
 
         TestCheckStagingPropertiesMojo mojo2 = new TestCheckStagingPropertiesMojo(folder.getRoot(), false);
         exception.expect(MojoFailureException.class);
+
         mojo2.execute();
+    }
+
+    private void createTestPropertiesFile(String filename, String content) throws Exception {
+        File f = new File(folder.getRoot().toString() + "/" + filename);
+        BufferedWriter w = new BufferedWriter(new FileWriter(f));
+        w.write(content);
+        w.close();
     }
 
     private class TestCheckStagingPropertiesMojo extends CheckStagingPropertiesMojo {
