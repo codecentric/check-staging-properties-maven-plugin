@@ -40,6 +40,15 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <build.plugin.coveralls.version>4.2.0</build.plugin.coveralls.version>
+        <build.plugin.jacoco.version>0.7.7.201606060606</build.plugin.jacoco.version>
+        <build.plugin.license.version>1.8</build.plugin.license.version>
+        <build.plugin.maven.plugin.version>3.5</build.plugin.maven.plugin.version>
+
+        <maven.plugin.api.version>3.3.9</maven.plugin.api.version>
+        <maven.plugin.annotations.version>3.5</maven.plugin.annotations.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <build>
@@ -47,7 +56,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>1.8</version>
+                <version>${build.plugin.license.version}</version>
                 <configuration>
                     <verbose>true</verbose>
                 </configuration>
@@ -67,7 +76,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.5</version>
+                <version>${build.plugin.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>default-descriptor</id>
@@ -78,22 +87,20 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.7.201606060606</version>
+                <version>${build.plugin.jacoco.version}</version>
                 <executions>
                     <execution>
-                        <id>pre-unit-test</id>
+                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>${build.plugin.coveralls.version}</version>
             </plugin>
         </plugins>
     </build>
@@ -102,19 +109,19 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>3.3.9</version>
+            <version>${maven.plugin.api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.5</version>
+            <version>${maven.plugin.annotations.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
