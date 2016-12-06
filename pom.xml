@@ -6,7 +6,7 @@
     <name>check-staging-properties-maven-plugin</name>
     <packaging>maven-plugin</packaging>
     <version>1.0.0</version>
-    <description>checks stage dependend properties</description>
+    <description>Checks stage dependent properties</description>
     <url>https://github.com/codecentric/check-staging-properties-maven-plugin</url>
     <organization>
         <name>codecentric AG</name>
