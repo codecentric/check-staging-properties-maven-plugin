@@ -26,8 +26,12 @@ Add the following lines within `build > plugins` in your `pom.xml`.
   <configuration>
     <directory>src/main/resources</directory>
     <breakBuild>true</breakBuild>
+    <groups>
+      <group>credentials-(.*)\.properties</group>
+      <group>settings-(.*)\.properties</group>
+    </groups>
   </configuration>
 </plugin>
 ```
-__Note:__
-The `configuration` section is optional. By default the plugin will search for properties in the `src/main/resources` directory and will break the build if the properties are not equal.
+
+**Note:** The `configuration` section is optional. By default the plugin will search for properties in the `src/main/resources` directory and will break the build if the properties are not equal. You can optionally pass a list of `groups` to group the checking of properties by filename.

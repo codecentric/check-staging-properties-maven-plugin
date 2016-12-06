@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
@@ -78,7 +79,7 @@ public class CheckStagingPropertiesMojoTest {
 
     @Test
     public void shouldContainEmptyPropertiesListWhenInputFileDoesNotExist() {
-        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(new File("/does/not/exist"), true);
+        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(new File("/does/not/exist"), true, null);
         assertEquals(0, mojo.getProperties().size());
     }
 
@@ -104,9 +105,9 @@ public class CheckStagingPropertiesMojoTest {
         this.createTestPropertiesFile("app-DEV.properties", "test.one =");
         this.createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
 
-        TestCheckStagingPropertiesMojo mojo2 = new TestCheckStagingPropertiesMojo(folder.getRoot(), false);
+        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, null);
         exception.expect(MojoFailureException.class);
-        mojo2.execute();
+        mojo.execute();
     }
 
     @Test
@@ -125,10 +126,10 @@ public class CheckStagingPropertiesMojoTest {
         this.createTestPropertiesFile("app-DEV.properties", "test.one =\ntest.three =");
         this.createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
 
-        TestCheckStagingPropertiesMojo mojo2 = new TestCheckStagingPropertiesMojo(folder.getRoot(), false);
+        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, null);
         exception.expect(MojoFailureException.class);
 
-        mojo2.execute();
+        mojo.execute();
     }
 
     @Test
@@ -147,10 +148,25 @@ public class CheckStagingPropertiesMojoTest {
         this.createTestPropertiesFile("app-DEV.properties", "test.one = one\ntest.two =");
         this.createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
 
-        TestCheckStagingPropertiesMojo mojo2 = new TestCheckStagingPropertiesMojo(folder.getRoot(), false);
+        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, null);
         exception.expect(MojoFailureException.class);
 
-        mojo2.execute();
+        mojo.execute();
+    }
+
+    @Test
+    public void groupPatternMatchingOfFilenames() throws Exception {
+        this.createTestPropertiesFile("test-DEV.properties", "test.one=\ntest.two=");
+        this.createTestPropertiesFile("test-PRD.properties", "test.one=\ntest.two=");
+        this.createTestPropertiesFile("bla-DEV.properties", "bla.bla=");
+        this.createTestPropertiesFile("bla-DEV.properties", "bla.bla=");
+
+        ArrayList<String> groups = new ArrayList<String>();
+        groups.add("test-.*");
+        groups.add("bla-.*");
+
+        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, groups);
+        mojo.execute();
     }
 
     private void createTestPropertiesFile(String filename, String content) throws Exception {
@@ -164,11 +180,13 @@ public class CheckStagingPropertiesMojoTest {
         TestCheckStagingPropertiesMojo() {
             this.directory = folder.getRoot();
             this.breakBuild = true;
+            this.groups = null;
         }
 
-        TestCheckStagingPropertiesMojo(File directory, Boolean breakBuild) {
+        TestCheckStagingPropertiesMojo(File directory, Boolean breakBuild, List<String> groups) {
             this.directory = directory;
             this.breakBuild = breakBuild;
+            this.groups = groups;
         }
     }
 }

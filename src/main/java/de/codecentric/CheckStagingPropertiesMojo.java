@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 @Mojo(name = "check", defaultPhase = LifecyclePhase.VALIDATE)
@@ -42,19 +43,22 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
     @Parameter(defaultValue = "true")
     boolean breakBuild;
 
-    private ArrayList<Properties> getPropertiesRecursively(File directory) {
+    @Parameter
+    List<String> groups;
+
+    private ArrayList<Properties> getPropertiesRecursively(File directory, String pattern) {
         ArrayList<Properties> propertyFiles = new ArrayList<Properties>();
         if (!this.directory.exists()) {
-            this.getLog().warn("Directory " + this.directory.getName() + " does not exist. Skipping.");
+            this.getLog().warn("Directory `" + this.directory.getName() + "` does not exist. Skipping.");
             return propertyFiles;
         }
 
         for (File f : directory.listFiles()) {
             if (f.isDirectory()) {
-                propertyFiles.addAll(this.getPropertiesRecursively(f));
+                propertyFiles.addAll(this.getPropertiesRecursively(f, pattern));
                 continue;
             }
-            if (!Files.isPropertiesFile(f)) {
+            if (!Files.isPropertiesFile(f) || (pattern != null && !f.getName().matches(pattern))) {
                 continue;
             }
 
@@ -62,7 +66,7 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
             try {
                 props.load(new FileInputStream(f.getAbsolutePath()));
             } catch (IOException e) {
-                this.getLog().warn("Cannot read file " + f.getName() + ": " + e.getMessage());
+                this.getLog().warn("Cannot read file `" + f.getName() + "`: " + e.getMessage());
                 continue;
             }
             propertyFiles.add(props);
@@ -71,7 +75,11 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
     }
 
     ArrayList<Properties> getProperties() {
-        return this.getPropertiesRecursively(this.directory);
+        return this.getPropertiesRecursively(this.directory, null);
+    }
+
+    ArrayList<Properties> getProperties(String pattern) {
+        return this.getPropertiesRecursively(this.directory, pattern);
     }
 
     private void error(String msg) throws MojoExecutionException, MojoFailureException {
@@ -82,8 +90,7 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
         }
     }
 
-    public void execute() throws MojoExecutionException, MojoFailureException {
-        ArrayList<Properties> props = this.getProperties();
+    private void doChecks(ArrayList<Properties> props) throws MojoExecutionException, MojoFailureException {
         if (props.size() > 1) {
             if (!StagingProperties.sizesEqual(props)) {
                 this.error("Sizes (number of keys) do not equal");
@@ -96,6 +103,16 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
             if (!StagingProperties.valuesAreEmpty(props)) {
                 this.error("Values are not empty");
             }
+        }
+    }
+
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        if (this.groups != null && this.groups.size() > 0) {
+            for (String group : this.groups) {
+                this.doChecks(this.getProperties(group));
+            }
+        } else {
+            this.doChecks(this.getProperties(null));
         }
     }
 }
