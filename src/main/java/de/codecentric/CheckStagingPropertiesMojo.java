@@ -40,7 +40,7 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
     File directory;
 
     @Parameter(defaultValue = "true")
-    Boolean breakBuild;
+    boolean breakBuild;
 
     private ArrayList<Properties> getPropertiesRecursively(File directory) {
         ArrayList<Properties> propertyFiles = new ArrayList<Properties>();
