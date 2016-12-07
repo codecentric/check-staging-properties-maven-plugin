@@ -33,4 +33,9 @@ final class Files {
         String extension = getExtension(f);
         return extension != null && extension.equals("properties");
     }
+
+    static boolean matchesGroup(File f, String groupPattern) {
+        return groupPattern == null || !f.getName().matches(groupPattern);
+    }
+
 }

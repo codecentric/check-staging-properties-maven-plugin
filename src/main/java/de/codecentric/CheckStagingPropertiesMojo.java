@@ -68,7 +68,7 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
                 propertyFiles.addAll(this.getPropertiesRecursively(file, pattern));
                 continue;
             }
-            if (!Files.isPropertiesFile(file) || !matchesGroup(pattern,file)) {
+            if (!Files.isPropertiesFile(file) || !Files.matchesGroup(file, pattern)) {
                 continue;
             }
 
@@ -116,7 +116,4 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
         }
     }
 
-    private boolean matchesGroup(String pattern, File f) {
-        return pattern == null || !f.getName().matches(pattern);
-    }
 }

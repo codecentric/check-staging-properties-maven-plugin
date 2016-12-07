@@ -58,4 +58,5 @@ final class StagingProperties {
         }
         return true;
     }
+
 }
