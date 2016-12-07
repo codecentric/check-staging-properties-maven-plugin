@@ -32,6 +32,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class TestStagingProperties {
+
     private static Properties getProperties(String value) throws Exception {
         InputStream stream = new ByteArrayInputStream(value.getBytes("UTF-8"));
         Properties props = new Properties();
@@ -82,12 +83,12 @@ public class TestStagingProperties {
     }
 
     @Test
-    public void testValuesAreEmpty() throws Exception {
-        assertFalse(StagingProperties.valuesAreEmpty(getPropertiesList(
-                "test.one = one\ntest.two=\ntest.three"
-        )));
-        assertTrue(StagingProperties.valuesAreEmpty(getPropertiesList(
+    public void testValuesPresent() throws Exception {
+        assertFalse(StagingProperties.valuesPresent(getPropertiesList(
                 "test.one =\ntest.two=\ntest.three"
+        )));
+        assertTrue(StagingProperties.valuesPresent(getPropertiesList(
+                "test.one = one\ntest.two = two\ntest.three = three"
         )));
     }
 
@@ -113,4 +114,5 @@ public class TestStagingProperties {
                 "test.one =\ntest.two=\ntest.three"
         )));
     }
+
 }

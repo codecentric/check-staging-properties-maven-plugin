@@ -156,10 +156,10 @@ public class CheckStagingPropertiesMojoTest {
 
     @Test
     public void groupPatternMatchingOfFilenames() throws Exception {
-        this.createTestPropertiesFile("test-DEV.properties", "test.one=\ntest.two=");
-        this.createTestPropertiesFile("test-PRD.properties", "test.one=\ntest.two=");
-        this.createTestPropertiesFile("bla-DEV.properties", "bla.bla=");
-        this.createTestPropertiesFile("bla-DEV.properties", "bla.bla=");
+        this.createTestPropertiesFile("test-DEV.properties", "test.one=one\ntest.two=two");
+        this.createTestPropertiesFile("test-PRD.properties", "test.one=one\ntest.two=two");
+        this.createTestPropertiesFile("bla-DEV.properties", "bla.bla=bla");
+        this.createTestPropertiesFile("bla-DEV.properties", "bla.bla=bla");
 
         ArrayList<String> groups = new ArrayList<String>();
         groups.add("test-.*");
@@ -189,4 +189,5 @@ public class CheckStagingPropertiesMojoTest {
             this.groups = groups;
         }
     }
+
 }

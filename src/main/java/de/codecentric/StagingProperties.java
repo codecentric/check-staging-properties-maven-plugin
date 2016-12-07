@@ -32,10 +32,10 @@ final class StagingProperties {
         return sizes.size() == 1;
     }
 
-    static boolean valuesAreEmpty(Collection<Properties> props) {
+    static boolean valuesPresent(Collection<Properties> props) {
         for (Properties prop : props) {
             for (Object value : prop.values()) {
-                if (((String) value).length() != 0) {
+                if (((String) value).length() == 0) {
                     return false;
                 }
             }

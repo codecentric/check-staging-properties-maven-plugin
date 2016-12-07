@@ -8,7 +8,7 @@ Maven-plugin for checking the equality of several `.properties`-files for Mule a
 
 - sizes (number of keys) are equal,
 - name of the keys are equal and
-- values are empty.
+- all values are present.
 
 ## Usage
 
@@ -21,7 +21,7 @@ Add the following lines within `build > plugins` in your `pom.xml`.
   <version>1.0.0</version>
   <executions>
     <execution>
-      <phase>validate</phase>
+      <phase>verify</phase>
       <goals>
         <goal>check</goal>
       </goals>

@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-@Mojo(name = "check", defaultPhase = LifecyclePhase.VALIDATE)
+@Mojo(name = "check", defaultPhase = LifecyclePhase.VERIFY)
 class CheckStagingPropertiesMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "src/main/resources")
@@ -110,8 +110,8 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
                 this.error("Keys do not equal");
             }
 
-            if (!StagingProperties.valuesAreEmpty(props)) {
-                this.error("Values are not empty");
+            if (!StagingProperties.valuesPresent(props)) {
+                this.error("Some values are empty");
             }
         }
     }

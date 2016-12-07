@@ -81,4 +81,5 @@ public class TestFiles {
     public void shouldNotDetectMacstoreFilesAsProperties() {
         assertFalse(isPropertiesFileHelper(".DS_Store"));
     }
+
 }
