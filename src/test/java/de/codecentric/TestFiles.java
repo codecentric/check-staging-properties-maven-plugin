@@ -28,6 +28,7 @@ import java.io.File;
 import static org.junit.Assert.*;
 
 public class TestFiles {
+
     private static String getExtensionHelper(String filename) {
         return Files.getExtension(new File(filename));
     }
@@ -38,22 +39,46 @@ public class TestFiles {
 
     @BeforeClass
     public static void setUp() {
-        new Files(); // for coverage
+        new Files(); // for coverage.. sorry ;-)
     }
 
     @Test
-    public void testGetExtension() throws Exception {
+    public void shouldExtractPdfAsFileExtension() {
         assertEquals("pdf", getExtensionHelper("test.pdf"));
+    }
+
+    @Test
+    public void shouldExtractGzAsFileExtension() {
         assertEquals("gz", getExtensionHelper("bla.tar.gz"));
+    }
+
+    @Test
+    public void shouldExtractPropertiesAsFileExtension() {
         assertEquals("properties", getExtensionHelper("app.properties"));
+    }
+
+    @Test
+    public void shouldNotExtractFileExtensionOfTemporaryFiles() throws Exception {
         assertNull(getExtensionHelper(".DS_Store"));
     }
 
     @Test
-    public void testIsPropertiesFile() throws Exception {
+    public void shouldNotDetectPdfAsPropertiesFile() {
         assertFalse(isPropertiesFileHelper("test.pdf"));
+    }
+
+    @Test
+    public void shouldNotDetectTarAsPropertiesFile() {
         assertFalse(isPropertiesFileHelper("bla.tar.gz"));
-        assertFalse(isPropertiesFileHelper(".DS_Store"));
+    }
+
+    @Test
+    public void shouldDetectPropertiesFileCorrectly() {
         assertTrue(isPropertiesFileHelper("app.properties"));
+    }
+
+    @Test
+    public void shouldNotDetectMacstoreFilesAsProperties() {
+        assertFalse(isPropertiesFileHelper(".DS_Store"));
     }
 }
