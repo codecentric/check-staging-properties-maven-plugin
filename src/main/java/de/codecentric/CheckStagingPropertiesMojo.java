@@ -59,7 +59,7 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
     private ArrayList<Properties> getPropertiesRecursively(File directory, String pattern) {
         ArrayList<Properties> propertyFiles = new ArrayList<Properties>();
         if (!directory.exists()) {
-            this.getLog().warn("Directory `" + this.directory.getName() + "` does not exist. Skipping.");
+            this.getLog().warn("Directory `" + directory.getName() + "` does not exist. Skipping.");
             return propertyFiles;
         }
 
