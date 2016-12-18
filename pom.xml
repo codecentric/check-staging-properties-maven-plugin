@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.codecentric</groupId>
     <artifactId>check-staging-properties-maven-plugin</artifactId>
     <name>check-staging-properties-maven-plugin</name>
     <packaging>maven-plugin</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <description>Checks stage dependent properties</description>
     <url>https://github.com/codecentric/check-staging-properties-maven-plugin</url>
     <organization>
@@ -56,7 +55,8 @@
         <url>scm:git:git@github.com:codecentric/check-staging-properties-maven-plugin.git</url>
         <developerConnection>scm:git:git@github.com:codecentric/check-staging-properties-maven-plugin.git
         </developerConnection>
-    </scm>
+      <tag>check-staging-properties-maven-plugin-1.0.0</tag>
+  </scm>
 
     <distributionManagement>
         <snapshotRepository>
