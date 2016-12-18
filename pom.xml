@@ -56,8 +56,20 @@
         <url>scm:git:git@github.com:codecentric/check-staging-properties-maven-plugin.git</url>
         <developerConnection>scm:git:git@github.com:codecentric/check-staging-properties-maven-plugin.git
         </developerConnection>
-        <!--<tag>v0.0.6</tag>-->
     </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <name>Nexus Release Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
     <profiles>
         <profile>
