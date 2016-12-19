@@ -53,8 +53,7 @@
     <scm>
         <connection>scm:git:git@github.com:codecentric/check-staging-properties-maven-plugin.git</connection>
         <url>scm:git:git@github.com:codecentric/check-staging-properties-maven-plugin.git</url>
-        <developerConnection>scm:git:git@github.com:codecentric/check-staging-properties-maven-plugin.git
-        </developerConnection>
+        <developerConnection>scm:git:git@github.com:codecentric/check-staging-properties-maven-plugin.git</developerConnection>
       <tag>check-staging-properties-maven-plugin-1.0.0</tag>
   </scm>
 
