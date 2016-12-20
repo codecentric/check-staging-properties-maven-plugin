@@ -49,10 +49,10 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (groups != null && groups.size() > 0) {
             for (String group : groups) {
-                doChecks(getProperties(group));
+                doChecks(group, getProperties(group));
             }
         } else {
-            doChecks(getProperties(null));
+            doChecks("", getProperties());
         }
     }
 
@@ -100,18 +100,18 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
         }
     }
 
-    private void doChecks(ArrayList<Properties> props) throws MojoExecutionException, MojoFailureException {
+    private void doChecks(String group, ArrayList<Properties> props) throws MojoExecutionException, MojoFailureException {
         if (props.size() > 1) {
             if (!StagingProperties.sizesEqual(props)) {
-                this.error("Sizes (number of keys) do not equal");
+                this.error("In group '" + group + "': Sizes (number of keys) are not equal");
             }
 
             if (!StagingProperties.keysEqual(props)) {
-                this.error("Keys do not equal");
+                this.error("In group '" + group + "': Keys are not equal");
             }
 
             if (!StagingProperties.valuesPresent(props)) {
-                this.error("Some values are empty");
+                this.error("In group '" + group + "': Some values are empty");
             }
         }
     }
