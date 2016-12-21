@@ -43,24 +43,24 @@ public class CheckStagingPropertiesMojoTest {
     public final ExpectedException exception = ExpectedException.none();
 
     @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+    public final TemporaryFolder folder = new TemporaryFolder();
 
     @Test
-    public void shouldContainEmptyList() {
+    public void shouldContainEmptyList() throws MojoExecutionException {
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
         ArrayList<Properties> properties = mojo.getProperties();
         assertEquals(0, properties.size());
     }
 
     @Test
-    public void shouldNotUseNonPropertiesFiles() throws IOException {
+    public void shouldNotUseNonPropertiesFiles() throws IOException, MojoExecutionException {
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
 
         folder.newFolder("child");
         folder.newFile("app-DEV.properties");
         folder.newFile("app-PRD.properties");
         folder.newFile(".DS_Store");
-        folder.newFolder("test.pdf");
+        folder.newFile("test.pdf");
 
         assertEquals(2, mojo.getProperties().size());
     }
@@ -78,7 +78,7 @@ public class CheckStagingPropertiesMojoTest {
     }
 
     @Test
-    public void shouldContainEmptyPropertiesListWhenInputFileDoesNotExist() {
+    public void shouldContainEmptyPropertiesListWhenInputFileDoesNotExist() throws MojoExecutionException {
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(new File("/does/not/exist"), true, null);
         assertEquals(0, mojo.getProperties().size());
     }
@@ -166,6 +166,18 @@ public class CheckStagingPropertiesMojoTest {
         groups.add("bla-.*");
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, groups);
+        mojo.execute();
+    }
+
+    @Test
+    public void unreadableFile() throws Exception {
+        this.createTestPropertiesFile("test-DEV.properties", "test.one=one\ntest.two=two");
+        File f = new File(folder.getRoot().toString() + "/" + "test-DEV.properties");
+        f.setReadable(false);
+        ArrayList<String> groups = new ArrayList<String>();
+        groups.add("test-.*");
+        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, groups);
+        exception.expect(MojoExecutionException.class);
         mojo.execute();
     }
 

@@ -35,7 +35,7 @@ final class Files {
     }
 
     static boolean matchesGroup(File f, String groupPattern) {
-        return groupPattern == null || !f.getName().matches(groupPattern);
+        return groupPattern == null || f.getName().matches(groupPattern);
     }
 
 }

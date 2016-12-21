@@ -82,4 +82,18 @@ public class TestFiles {
         assertFalse(isPropertiesFileHelper(".DS_Store"));
     }
 
+    @Test
+    public void matchesGroupShouldMatchWithoutPattern() {
+        assertTrue(Files.matchesGroup(null, null));
+    }
+
+    @Test
+    public void matchesGroupShouldMatch() {
+        assertTrue(Files.matchesGroup(new File("abc.properties"), "ab.\\.properties"));
+    }
+
+    @Test
+    public void matchesGroupShouldNotMatch() {
+        assertFalse(Files.matchesGroup(new File("abc.properties"), "de.\\.properties"));
+    }
 }
