@@ -97,6 +97,7 @@ public class CheckStagingPropertiesMojoTest {
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
         exception.expect(MojoExecutionException.class);
+        exception.expectMessage("Sizes (number of keys) are not equal");
 
         mojo.execute();
     }
@@ -108,6 +109,7 @@ public class CheckStagingPropertiesMojoTest {
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, null);
         exception.expect(MojoFailureException.class);
+        exception.expectMessage("Sizes (number of keys) are not equal");
         mojo.execute();
     }
 
@@ -118,6 +120,7 @@ public class CheckStagingPropertiesMojoTest {
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
         exception.expect(MojoExecutionException.class);
+        exception.expectMessage("Keys are not equal");
 
         mojo.execute();
     }
@@ -129,6 +132,7 @@ public class CheckStagingPropertiesMojoTest {
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, null);
         exception.expect(MojoFailureException.class);
+        exception.expectMessage("Keys are not equal");
 
         mojo.execute();
     }
@@ -140,6 +144,7 @@ public class CheckStagingPropertiesMojoTest {
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
         exception.expect(MojoExecutionException.class);
+        exception.expectMessage("Some values are empty");
 
         mojo.execute();
     }
@@ -151,6 +156,7 @@ public class CheckStagingPropertiesMojoTest {
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, null);
         exception.expect(MojoFailureException.class);
+        exception.expectMessage("Some values are empty");
 
         mojo.execute();
     }
