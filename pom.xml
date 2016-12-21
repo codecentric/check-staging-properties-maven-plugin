@@ -43,6 +43,7 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
 
+        <build.plugin.maven.compiler.version>3.1</build.plugin.maven.compiler.version>
         <build.plugin.coveralls.version>4.2.0</build.plugin.coveralls.version>
         <build.plugin.jacoco.version>0.7.7.201606060606</build.plugin.jacoco.version>
         <build.plugin.license.version>1.8</build.plugin.license.version>
@@ -162,7 +163,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>${build.plugin.maven.compiler.version}</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
