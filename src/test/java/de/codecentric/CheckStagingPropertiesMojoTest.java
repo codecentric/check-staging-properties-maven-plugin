@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CheckStagingPropertiesMojoTest {
 
@@ -161,7 +162,7 @@ public class CheckStagingPropertiesMojoTest {
         this.createTestPropertiesFile("bla-DEV.properties", "bla.bla=bla");
         this.createTestPropertiesFile("bla-DEV.properties", "bla.bla=bla");
 
-        ArrayList<String> groups = new ArrayList<String>();
+        ArrayList<String> groups = new ArrayList<>();
         groups.add("test-.*");
         groups.add("bla-.*");
 
@@ -171,21 +172,30 @@ public class CheckStagingPropertiesMojoTest {
 
     @Test
     public void unreadableFile() throws Exception {
-        this.createTestPropertiesFile("test-DEV.properties", "test.one=one\ntest.two=two");
-        File f = new File(folder.getRoot().toString() + "/" + "test-DEV.properties");
-        f.setReadable(false);
-        ArrayList<String> groups = new ArrayList<String>();
+        File f = this.createTestPropertiesFile("test-DEV.properties", "test.one=one\ntest.two=two");
+        boolean successful = f.setReadable(false);
+        assertTrue(successful);
+        ArrayList<String> groups = new ArrayList<>();
         groups.add("test-.*");
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, groups);
         exception.expect(MojoExecutionException.class);
         mojo.execute();
     }
 
-    private void createTestPropertiesFile(String filename, String content) throws Exception {
+    @Test
+    public void fileAsDirectory() throws Exception {
+        File f = this.createTestPropertiesFile("test.properties", "");
+        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(f, false, new ArrayList<String>());
+        mojo.getProperties();
+
+    }
+
+    private File createTestPropertiesFile(String filename, String content) throws Exception {
         File f = new File(folder.getRoot().toString() + "/" + filename);
         BufferedWriter w = new BufferedWriter(new FileWriter(f));
         w.write(content);
         w.close();
+        return f;
     }
 
     private class TestCheckStagingPropertiesMojo extends CheckStagingPropertiesMojo {

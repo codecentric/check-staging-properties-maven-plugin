@@ -56,20 +56,26 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
         }
     }
 
-    private ArrayList<Properties> getPropertiesRecursively(File directory, String pattern) throws MojoExecutionException {
-        ArrayList<Properties> propertyFiles = new ArrayList<Properties>(20);
+    private ArrayList<Properties> getPropertiesRecursively(File directory, String pattern)
+            throws MojoExecutionException {
+        ArrayList<Properties> propertyFiles = new ArrayList<>(20);
         if (directory == null || !directory.exists()) {
-            this.getLog().warn("Directory `" + (directory == null ? "" : directory.getAbsolutePath()) + "` does not exist. Skipping.");
+            getLog().warn("Directory `" +
+                    (directory == null ? "" : directory.getAbsolutePath()) +
+                    "` does not exist. Skipping.");
             return propertyFiles;
         }
+
         final File[] files = directory.listFiles();
         if (files == null) {
-            this.getLog().warn("Directory `" + directory.getAbsolutePath() + "` does not denote a directory. Skipping.");
+            getLog().warn("Directory `" +
+                    directory.getAbsolutePath() +
+                    "` does not denote a directory. Skipping.");
             return propertyFiles;
         }
         for (File file : files) {
             if (file.isDirectory()) {
-                propertyFiles.addAll(this.getPropertiesRecursively(file, pattern));
+                propertyFiles.addAll(getPropertiesRecursively(file, pattern));
                 continue;
             }
             if (!Files.isPropertiesFile(file) || !Files.matchesGroup(file, pattern)) {
@@ -80,7 +86,7 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
             try {
                 props.load(new FileInputStream(file.getAbsolutePath()));
             } catch (IOException e) {
-                throw new MojoExecutionException("Cannot read file '" + file.getName() + "'", e);
+                throw new MojoExecutionException("Cannot read file `" + file.getName() + "`", e);
             }
             propertyFiles.add(props);
         }
@@ -88,11 +94,11 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
     }
 
     ArrayList<Properties> getProperties() throws MojoExecutionException {
-        return this.getPropertiesRecursively(directory, null);
+        return getPropertiesRecursively(directory, null);
     }
 
     private ArrayList<Properties> getProperties(String pattern) throws MojoExecutionException {
-        return this.getPropertiesRecursively(directory, pattern);
+        return getPropertiesRecursively(directory, pattern);
     }
 
     private void error(String msg) throws MojoExecutionException, MojoFailureException {
@@ -103,18 +109,19 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
         }
     }
 
-    private void doChecks(String group, ArrayList<Properties> props) throws MojoExecutionException, MojoFailureException {
+    private void doChecks(String group, ArrayList<Properties> props)
+            throws MojoExecutionException, MojoFailureException {
         if (props.size() > 1) {
             if (!StagingProperties.sizesEqual(props)) {
-                this.error("In group '" + group + "': Sizes (number of keys) are not equal");
+                error("In group `" + group + "`: Sizes (number of keys) are not equal");
             }
 
             if (!StagingProperties.keysEqual(props)) {
-                this.error("In group '" + group + "': Keys are not equal");
+                error("In group `" + group + "`: Keys are not equal");
             }
 
             if (!StagingProperties.valuesPresent(props)) {
-                this.error("In group '" + group + "': Some values are empty");
+                error("In group `" + group + "`: Some values are empty");
             }
         }
     }
