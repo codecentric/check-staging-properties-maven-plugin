@@ -56,14 +56,18 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
         }
     }
 
-    private ArrayList<Properties> getPropertiesRecursively(File directory, String pattern) {
+    private ArrayList<Properties> getPropertiesRecursively(File directory, String pattern) throws MojoExecutionException {
         ArrayList<Properties> propertyFiles = new ArrayList<Properties>(20);
-        if (!directory.exists()) {
-            this.getLog().warn("Directory `" + directory.getName() + "` does not exist. Skipping.");
+        if (directory == null || !directory.exists()) {
+            this.getLog().warn("Directory `" + (directory == null ? "" : directory.getAbsolutePath()) + "` does not exist. Skipping.");
             return propertyFiles;
         }
-
-        for (File file : directory.listFiles()) {
+        final File[] files = directory.listFiles();
+        if (files == null) {
+            this.getLog().warn("Directory `" + directory.getAbsolutePath() + "` does not denote a directory. Skipping.");
+            return propertyFiles;
+        }
+        for (File file : files) {
             if (file.isDirectory()) {
                 propertyFiles.addAll(this.getPropertiesRecursively(file, pattern));
                 continue;
@@ -76,19 +80,18 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
             try {
                 props.load(new FileInputStream(file.getAbsolutePath()));
             } catch (IOException e) {
-                this.getLog().warn("Cannot read file `" + file.getName() + "`: " + e.getMessage());
-                continue;
+                throw new MojoExecutionException("Cannot read file '" + file.getName() + "'", e);
             }
             propertyFiles.add(props);
         }
         return propertyFiles;
     }
 
-    ArrayList<Properties> getProperties() {
+    ArrayList<Properties> getProperties() throws MojoExecutionException {
         return this.getPropertiesRecursively(directory, null);
     }
 
-    private ArrayList<Properties> getProperties(String pattern) {
+    private ArrayList<Properties> getProperties(String pattern) throws MojoExecutionException {
         return this.getPropertiesRecursively(directory, pattern);
     }
 
