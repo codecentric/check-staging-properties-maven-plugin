@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.codecentric</groupId>
     <artifactId>check-staging-properties-maven-plugin</artifactId>
@@ -56,10 +57,11 @@
 
     <scm>
         <connection>scm:git:git@github.com:codecentric/check-staging-properties-maven-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:codecentric/check-staging-properties-maven-plugin.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:codecentric/check-staging-properties-maven-plugin.git
+        </developerConnection>
         <url>https://github.com/codecentric/check-staging-properties-maven-plugin/tree/master</url>
-      <tag>check-staging-properties-maven-plugin-1.0.0</tag>
-  </scm>
+        <tag>check-staging-properties-maven-plugin-1.0.0</tag>
+    </scm>
 
     <distributionManagement>
         <snapshotRepository>
@@ -76,13 +78,7 @@
 
     <profiles>
         <profile>
-            <id>release-sign-artifacts</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
+            <id>sign-artifacts</id>
             <build>
                 <plugins>
                     <plugin>
@@ -99,6 +95,26 @@
                         </executions>
                         <version>1.5</version>
                     </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <version>${build.plugin.license.version}</version>
+                        <configuration>
+                            <verbose>true</verbose>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>add-apache-headers</id>
+                                <goals>
+                                    <goal>update-file-header</goal>
+                                </goals>
+                                <phase>process-sources</phase>
+                                <configuration>
+                                    <licenseName>apache_v2</licenseName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -106,31 +122,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>${build.plugin.license.version}</version>
-                <configuration>
-                    <verbose>true</verbose>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>add-apache-headers</id>
-                        <goals>
-                            <goal>update-file-header</goal>
-                        </goals>
-                        <phase>process-sources</phase>
-                        <configuration>
-                            <licenseName>apache_v2</licenseName>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
