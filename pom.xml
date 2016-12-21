@@ -45,7 +45,7 @@
 
         <build.plugin.maven.compiler.version>3.1</build.plugin.maven.compiler.version>
         <build.plugin.coveralls.version>4.2.0</build.plugin.coveralls.version>
-        <build.plugin.jacoco.version>0.7.7.201606060606</build.plugin.jacoco.version>
+        <build.plugin.cobertura.version>2.7</build.plugin.cobertura.version>
         <build.plugin.license.version>1.8</build.plugin.license.version>
         <build.plugin.maven.plugin.version>3.5</build.plugin.maven.plugin.version>
 
@@ -142,28 +142,15 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--<plugin>-->
-                <!--<groupId>org.jacoco</groupId>-->
-                <!--<artifactId>jacoco-maven-plugin</artifactId>-->
-                <!--<version>${build.plugin.jacoco.version}</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>prepare-agent</id>-->
-                        <!--<goals>-->
-                            <!--<goal>prepare-agent</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
+                <version>${build.plugin.cobertura.version}</version>
                 <configuration>
                     <format>xml</format>
                     <maxmem>256m</maxmem>
                     <!-- aggregated reports for multi-module projects -->
-                    <aggregate>true</aggregate>
+                    <aggregate>false</aggregate>
                     <check/>
                 </configuration>
             </plugin>
