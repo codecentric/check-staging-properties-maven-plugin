@@ -80,7 +80,7 @@ public class CheckStagingPropertiesMojoTest {
 
     @Test
     public void shouldContainEmptyPropertiesListWhenInputFileDoesNotExist() throws MojoExecutionException {
-        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(new File("/does/not/exist"), true, null);
+        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(new File("/does/not/exist"),null);
         assertEquals(0, mojo.getProperties().size());
     }
 
@@ -137,7 +137,7 @@ public class CheckStagingPropertiesMojoTest {
         groups.add("test-.*");
         groups.add("bla-.*");
 
-        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, groups);
+        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), groups);
         mojo.execute();
     }
 
@@ -148,7 +148,7 @@ public class CheckStagingPropertiesMojoTest {
         assertTrue(successful);
         ArrayList<String> groups = new ArrayList<>();
         groups.add("test-.*");
-        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, groups);
+        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), groups);
         exception.expect(MojoExecutionException.class);
         mojo.execute();
     }
@@ -156,7 +156,7 @@ public class CheckStagingPropertiesMojoTest {
     @Test
     public void fileAsDirectory() throws Exception {
         File f = createTestPropertiesFile("test.properties", "");
-        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(f, false, new ArrayList<String>());
+        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(f, new ArrayList<String>());
         mojo.getProperties();
 
     }
@@ -172,13 +172,11 @@ public class CheckStagingPropertiesMojoTest {
     private class TestCheckStagingPropertiesMojo extends CheckStagingPropertiesMojo {
         TestCheckStagingPropertiesMojo() {
             this.directory = folder.getRoot();
-            this.breakBuild = true;
             this.groups = null;
         }
 
-        TestCheckStagingPropertiesMojo(File directory, Boolean breakBuild, List<String> groups) {
+        TestCheckStagingPropertiesMojo(File directory, List<String> groups) {
             this.directory = directory;
-            this.breakBuild = breakBuild;
             this.groups = groups;
         }
     }
