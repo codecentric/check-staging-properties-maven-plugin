@@ -96,41 +96,18 @@ public class CheckStagingPropertiesMojoTest {
         createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
-        exception.expect(MojoExecutionException.class);
-        exception.expectMessage("Sizes (number of keys) are not equal");
-
-        mojo.execute();
-    }
-
-    @Test
-    public void shouldNotBreakBuildWhenPropertiesSizesAreNotEqual() throws Exception {
-        this.createTestPropertiesFile("app-DEV.properties", "test.one =");
-        this.createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
-
-        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, null);
         exception.expect(MojoFailureException.class);
         exception.expectMessage("Sizes (number of keys) are not equal");
+
         mojo.execute();
     }
 
     @Test
     public void shouldBreakBuildWhenPropertiesKeysAreNotEqual() throws Exception {
-        this.createTestPropertiesFile("app-DEV.properties", "test.one =\ntest.three =");
-        this.createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
+        createTestPropertiesFile("app-DEV.properties", "test.one =\ntest.three =");
+        createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
-        exception.expect(MojoExecutionException.class);
-        exception.expectMessage("Keys are not equal");
-
-        mojo.execute();
-    }
-
-    @Test
-    public void shouldNotBreakBuildWhenPropertiesKeysAreNotEqual() throws Exception {
-        this.createTestPropertiesFile("app-DEV.properties", "test.one =\ntest.three =");
-        this.createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
-
-        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, null);
         exception.expect(MojoFailureException.class);
         exception.expectMessage("Keys are not equal");
 
@@ -139,22 +116,10 @@ public class CheckStagingPropertiesMojoTest {
 
     @Test
     public void shouldBreakBuildWhenPropertiesValuesAreNotEqual() throws Exception {
-        this.createTestPropertiesFile("app-DEV.properties", "test.one = one\ntest.two =");
-        this.createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
+        createTestPropertiesFile("app-DEV.properties", "test.one = one\ntest.two =");
+        createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
-        exception.expect(MojoExecutionException.class);
-        exception.expectMessage("Some values are empty");
-
-        mojo.execute();
-    }
-
-    @Test
-    public void shouldNotBreakBuildWhenValuesAreNotEqual() throws Exception {
-        this.createTestPropertiesFile("app-DEV.properties", "test.one = one\ntest.two =");
-        this.createTestPropertiesFile("app-PRD.properties", "test.one =\ntest.two =");
-
-        TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(folder.getRoot(), false, null);
         exception.expect(MojoFailureException.class);
         exception.expectMessage("Some values are empty");
 
@@ -163,10 +128,10 @@ public class CheckStagingPropertiesMojoTest {
 
     @Test
     public void groupPatternMatchingOfFilenames() throws Exception {
-        this.createTestPropertiesFile("test-DEV.properties", "test.one=one\ntest.two=two");
-        this.createTestPropertiesFile("test-PRD.properties", "test.one=one\ntest.two=two");
-        this.createTestPropertiesFile("bla-DEV.properties", "bla.bla=bla");
-        this.createTestPropertiesFile("bla-DEV.properties", "bla.bla=bla");
+        createTestPropertiesFile("test-DEV.properties", "test.one=one\ntest.two=two");
+        createTestPropertiesFile("test-PRD.properties", "test.one=one\ntest.two=two");
+        createTestPropertiesFile("bla-DEV.properties", "bla.bla=bla");
+        createTestPropertiesFile("bla-DEV.properties", "bla.bla=bla");
 
         ArrayList<String> groups = new ArrayList<>();
         groups.add("test-.*");
@@ -178,7 +143,7 @@ public class CheckStagingPropertiesMojoTest {
 
     @Test
     public void unreadableFile() throws Exception {
-        File f = this.createTestPropertiesFile("test-DEV.properties", "test.one=one\ntest.two=two");
+        File f = createTestPropertiesFile("test-DEV.properties", "test.one=one\ntest.two=two");
         boolean successful = f.setReadable(false);
         assertTrue(successful);
         ArrayList<String> groups = new ArrayList<>();
@@ -190,7 +155,7 @@ public class CheckStagingPropertiesMojoTest {
 
     @Test
     public void fileAsDirectory() throws Exception {
-        File f = this.createTestPropertiesFile("test.properties", "");
+        File f = createTestPropertiesFile("test.properties", "");
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo(f, false, new ArrayList<String>());
         mojo.getProperties();
 

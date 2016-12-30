@@ -40,9 +40,6 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
     @Parameter(defaultValue = "src/main/resources")
     File directory;
 
-    @Parameter(defaultValue = "true")
-    boolean breakBuild;
-
     @Parameter
     List<String> groups;
 
@@ -101,27 +98,19 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
         return getPropertiesRecursively(directory, pattern);
     }
 
-    private void error(String msg) throws MojoExecutionException, MojoFailureException {
-        if (breakBuild) {
-            throw new MojoExecutionException(msg);
-        } else {
-            throw new MojoFailureException(msg);
-        }
-    }
-
     private void doChecks(String group, ArrayList<Properties> props)
             throws MojoExecutionException, MojoFailureException {
         if (props.size() > 1) {
             if (!StagingProperties.sizesEqual(props)) {
-                error("In group `" + group + "`: Sizes (number of keys) are not equal");
+                throw new MojoFailureException("In group `" + group + "`: Sizes (number of keys) are not equal");
             }
 
             if (!StagingProperties.keysEqual(props)) {
-                error("In group `" + group + "`: Keys are not equal");
+                throw new MojoFailureException("In group `" + group + "`: Keys are not equal");
             }
 
             if (!StagingProperties.valuesPresent(props)) {
-                error("In group `" + group + "`: Some values are empty");
+                throw new MojoFailureException("In group `" + group + "`: Some values are empty");
             }
         }
     }
