@@ -44,7 +44,7 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
     List<String> groups;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        if (groups != null && groups.size() > 0) {
+        if (isGroupingEnabled()) {
             for (String group : groups) {
                 doChecks(group, getProperties(group));
             }
@@ -75,7 +75,7 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
                 propertyFiles.addAll(getPropertiesRecursively(file, pattern));
                 continue;
             }
-            if (!Files.isPropertiesFile(file) || !Files.matchesGroup(file, pattern)) {
+            if (!isPropertiesFile(file) || !matchesGroupPattern(pattern, file)) {
                 continue;
             }
 
@@ -115,4 +115,15 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
         }
     }
 
+    private boolean isGroupingEnabled() {
+        return groups != null && groups.size() > 0;
+    }
+
+    private boolean matchesGroupPattern(String pattern, File file) {
+        return Files.matchesGroup(file, pattern);
+    }
+
+    private boolean isPropertiesFile(File file) {
+        return Files.isPropertiesFile(file);
+    }
 }
