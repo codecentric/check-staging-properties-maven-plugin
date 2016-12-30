@@ -31,7 +31,6 @@ Add the following lines within `build > plugins` in your `pom.xml`.
   </executions>
   <configuration>
     <directory>src/main/resources</directory>
-    <breakBuild>true</breakBuild>
     <groups>
       <group>credentials-(.*)\.properties</group>
       <group>settings-(.*)\.properties</group>
@@ -40,4 +39,4 @@ Add the following lines within `build > plugins` in your `pom.xml`.
 </plugin>
 ```
 
-**Note:** The `configuration` section is optional. By default the plugin will search for properties in the `src/main/resources` directory and will break the build if the properties are not equal. You can optionally pass a list of `groups` to group the checking of properties by filename.
+**Note:** The `configuration` section is optional. By default the plugin will search for properties in the `src/main/resources` directory and will break the Maven build if the properties are not equal. You can optionally pass a list of `groups` to group the checking of properties by filename.
