@@ -14,7 +14,7 @@ Maven-plugin for checking the equality of several `.properties`-files for Mule a
 
 ## Usage
 
-Add the following lines within `build > plugins` in your `pom.xml`.
+Add the following lines to the `build > plugins` section of your `pom.xml`. Here's an example:
 
 ```xml
 <plugin>
