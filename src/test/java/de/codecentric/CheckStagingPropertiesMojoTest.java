@@ -121,8 +121,13 @@ public class CheckStagingPropertiesMojoTest {
 
         TestCheckStagingPropertiesMojo mojo = new TestCheckStagingPropertiesMojo();
         exception.expect(MojoFailureException.class);
-        exception.expectMessage("Some values are empty");
-
+        final String exceptionMessage = "There are some empty values in: [file: app-DEV.properties, keys: \n" +
+                "test.two\n" +
+                ", file: app-PRD.properties, keys: \n" +
+                "test.two\n" +
+                "test.one\n" +
+                "]`";
+        exception.expectMessage(exceptionMessage);
         mojo.execute();
     }
 

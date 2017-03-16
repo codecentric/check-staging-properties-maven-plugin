@@ -30,9 +30,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 @Mojo(name = "check", defaultPhase = LifecyclePhase.VERIFY)
 class CheckStagingPropertiesMojo extends AbstractMojo {
@@ -42,6 +40,8 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
 
     @Parameter
     List<String> groups;
+
+    private List<String> fileNames = new LinkedList<>();
 
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (isGroupingEnabled()) {
@@ -73,6 +73,7 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
         for (File file : files) {
             if (file.isDirectory()) {
                 propertyFiles.addAll(getPropertiesRecursively(file, pattern));
+                fileNames.add(file.getName());
                 continue;
             }
             if (!isPropertiesFile(file) || !matchesGroupPattern(pattern, file)) {
@@ -86,6 +87,7 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
                 throw new MojoExecutionException("Cannot read file `" + file.getName() + "`", e);
             }
             propertyFiles.add(props);
+            fileNames.add(file.getName());
         }
         return propertyFiles;
     }
@@ -110,7 +112,22 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
             }
 
             if (!StagingProperties.valuesPresent(props)) {
-                throw new MojoFailureException("In group `" + group + "`: Some values are empty");
+                List<String> errors = new LinkedList<>();
+                for (int i = 0; i < fileNames.size(); i++) {
+                    String missingValues = "";
+                    for (Object key : props.get(i).keySet()) {
+                        String value = (String) props.get(i).get(key);
+                        if (value == null || "".equals(value)) {
+                            missingValues += key + "\n";
+                        }
+                    }
+                    errors.add("file: " + fileNames.get(i) + ", keys: \n" + missingValues);
+                }
+                if (group == null || "".equals(group)) {
+                    throw new MojoFailureException("There are some empty values in: " + errors + "`");
+                } else {
+                    throw new MojoFailureException("There are some empty values in group `" + group + "` and `" + errors + "`");
+                }
             }
         }
     }
