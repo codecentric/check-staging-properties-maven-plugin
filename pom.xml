@@ -5,7 +5,7 @@
     <artifactId>check-staging-properties-maven-plugin</artifactId>
     <name>check-staging-properties-maven-plugin</name>
     <packaging>maven-plugin</packaging>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.3</version>
     <description>Checks stage dependent properties</description>
     <url>https://github.com/codecentric/check-staging-properties-maven-plugin</url>
     <organization>
@@ -60,7 +60,7 @@
         <developerConnection>scm:git:git@github.com:codecentric/check-staging-properties-maven-plugin.git
         </developerConnection>
         <url>https://github.com/codecentric/check-staging-properties-maven-plugin/tree/master</url>
-        <tag>check-staging-properties-maven-plugin-1.0.0</tag>
+        <tag>check-staging-properties-maven-plugin-1.0.3</tag>
     </scm>
 
     <distributionManagement>
@@ -114,6 +114,17 @@
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
