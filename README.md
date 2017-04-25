@@ -20,7 +20,7 @@ Add the following lines to the `build > plugins` section of your `pom.xml`. Here
 <plugin>
   <groupId>de.codecentric</groupId>
   <artifactId>check-staging-properties-maven-plugin</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <executions>
     <execution>
       <phase>verify</phase>
