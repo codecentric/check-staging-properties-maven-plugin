@@ -73,7 +73,6 @@ class CheckStagingPropertiesMojo extends AbstractMojo {
         for (File file : files) {
             if (file.isDirectory()) {
                 propertyFiles.addAll(getPropertiesRecursively(file, pattern));
-                fileNames.add(file.getName());
                 continue;
             }
             if (!isPropertiesFile(file) || !matchesGroupPattern(pattern, file)) {
