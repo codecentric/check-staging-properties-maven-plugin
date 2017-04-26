@@ -78,7 +78,7 @@
 
     <profiles>
         <profile>
-            <id>sign-artifacts</id>
+            <id>upload-release</id>
             <build>
                 <plugins>
                     <plugin>
